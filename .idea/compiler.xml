@@ -26,7 +26,7 @@
         <module name="MyAnimeListOrganizer" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="1.8">
       <module name="MyAnimeListOrganizer" target="1.8" />
     </bytecodeTargetLevel>
   </component>
