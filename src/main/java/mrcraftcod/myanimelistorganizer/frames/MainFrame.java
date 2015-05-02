@@ -1,16 +1,12 @@
 package mrcraftcod.myanimelistorganizer.frames;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
 import mrcraftcod.myanimelistorganizer.Main;
 import mrcraftcod.myanimelistorganizer.enums.Status;
 import mrcraftcod.myanimelistorganizer.frames.components.AnimePanel;
 import mrcraftcod.myanimelistorganizer.frames.components.SearchPanel;
-import mrcraftcod.myanimelistorganizer.objects.Anime;
 import mrcraftcod.myanimelistorganizer.utils.MyAnimeListHandler;
 import javax.swing.*;
 import java.awt.*;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 
 public class MainFrame extends JFrame
 {
@@ -20,7 +16,6 @@ public class MainFrame extends JFrame
 	private final AnimePanel onHold;
 	private final AnimePanel dropped;
 	private final AnimePanel planned;
-	private final SearchPanel search;
 
 	public MainFrame(MyAnimeListHandler myAnimeListHandler)
 	{
@@ -31,7 +26,7 @@ public class MainFrame extends JFrame
 		this.setIconImages(Main.icons);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.getContentPane().setLayout(new GridBagLayout());
-		search = new SearchPanel(this);
+		SearchPanel search = new SearchPanel(this);
 		watching = new AnimePanel(this, Status.WATCHING);
 		completed = new AnimePanel(this, Status.COMPLETED);
 		onHold = new AnimePanel(this, Status.ONHOLD);
@@ -60,12 +55,6 @@ public class MainFrame extends JFrame
 		this.setLocation(dim.width / 2 - this.getPreferredSize().width / 2, dim.height / 2 - this.getPreferredSize().height / 2);
 		pack();
 		setVisible(true);
-	}
-
-	public void modify(Anime anime) throws URISyntaxException, UnirestException, MalformedURLException
-	{
-		myal.modify(this, anime);
-		updateAll();
 	}
 
 	public void updateAll()

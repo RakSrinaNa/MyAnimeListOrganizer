@@ -10,7 +10,7 @@ import java.awt.event.WindowListener;
 
 public class ModifyAnimeDialogFrame extends JDialog
 {
-	private Anime result;
+	private final Anime result;
 	private final JTextField watched;
 	private final JTextField score;
 	private final JComboBox<Status> status;
@@ -105,6 +105,7 @@ public class ModifyAnimeDialogFrame extends JDialog
 		gcb.weightx = 100;
 		gcb.gridx = 1;
 		getContentPane().add(status, gcb);
+		setLocationRelativeTo(parent);
 		pack();
 	}
 
@@ -112,7 +113,7 @@ public class ModifyAnimeDialogFrame extends JDialog
 	{
 		result.setWatched(watched.getText().equals("") ? 0 : Integer.parseInt(watched.getText()));
 		result.setScore(score.getText().equals("") ? 0 : Integer.parseInt(score.getText()));
-		result.setStatus(((Status)status.getSelectedItem()));
+		result.setStatus(((Status) status.getSelectedItem()));
 		setVisible(false);
 	}
 

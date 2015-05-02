@@ -1,22 +1,28 @@
 package mrcraftcod.myanimelistorganizer.frames.components;
 
 import mrcraftcod.myanimelistorganizer.enums.Status;
+import mrcraftcod.myanimelistorganizer.frames.AnimeInfoDialog;
 import mrcraftcod.myanimelistorganizer.frames.MainFrame;
-import mrcraftcod.myanimelistorganizer.objects.Anime;
+import mrcraftcod.myanimelistorganizer.objects.AnimeInfo;
+import org.xml.sax.SAXException;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.*;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class SearchPanel extends JPanel
 {
 	private final JTableUneditableModel model;
 	private final JTable table;
-	private MainFrame parent;
-	private JTextField entry;
+	private final MainFrame parent;
+	private final JTextField entry;
 
 	public SearchPanel(MainFrame parent)
 	{
@@ -25,7 +31,7 @@ public class SearchPanel extends JPanel
 		setLayout(new GridBagLayout());
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-		model = new JTableUneditableModel(null , new String[]{"Titre"});
+		model = new JTableUneditableModel(new AnimeInfo[][]{}, new String[]{"Titre"});
 		table = new JTable(model)
 		{
 			private static final long serialVersionUID = 4244155500155330717L;
@@ -33,7 +39,7 @@ public class SearchPanel extends JPanel
 			@Override
 			public Class<?> getColumnClass(int column)
 			{
-				return String.class;
+				return AnimeInfo.class;
 			}
 		};
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -41,16 +47,6 @@ public class SearchPanel extends JPanel
 		{
 			@Override
 			public void mouseClicked(MouseEvent event)
-			{
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent event)
-			{
-			}
-
-			@Override
-			public void mouseExited(MouseEvent event)
 			{
 			}
 
@@ -70,35 +66,51 @@ public class SearchPanel extends JPanel
 				int rowindex = SearchPanel.this.table.getSelectedRow();
 				if(event.isPopupTrigger() && event.getComponent() instanceof JTable)
 				{
-					final String name = SearchPanel.this.table.getValueAt(rowindex, 0).toString().trim();
+					final AnimeInfo anime = getAnimeInfo(SearchPanel.this.table.getValueAt(rowindex, 0).toString().trim());
+					if(anime == null)
+						return;
 					JPopupMenu popup = new JPopupMenu();
 					JMenuItem viewMoreInfo = new JMenuItem("Informations");
 					viewMoreInfo.addActionListener(event1 -> {
 						try
 						{
-							final Anime anime = parent.myal.getAnimeInfos(getAnimeID(name));
+							new AnimeInfoDialog(SearchPanel.this.parent, anime);
 						}
 						catch(Exception exception)
 						{
+							exception.printStackTrace();
 						}
 					});
 					JMenuItem addAnime = new JMenuItem("Ajouter \340 la liste");
 					addAnime.addActionListener(event1 -> {
 						try
 						{
-							parent.myal.addAnime(getAnimeID(name), Status.PLANNEDTOWATCH);
+							parent.myal.addAnime(anime, (Status)JOptionPane.showInputDialog(parent, "Quel status voulez-vous lui attribuer?", "Status", JOptionPane.QUESTION_MESSAGE, null, Status.values(), Status.PLANNEDTOWATCH));
+							parent.updateAll();
 						}
 						catch(Exception exception)
 						{
+							exception.printStackTrace();
 						}
 					});
 					popup.add(viewMoreInfo);
-					popup.add(addAnime);
+					if(!parent.myal.containsID(anime.getID()))
+						popup.add(addAnime);
 					popup.show(event.getComponent(), event.getX(), event.getY());
 				}
 			}
+
+			@Override
+			public void mouseEntered(MouseEvent event)
+			{
+			}
+
+			@Override
+			public void mouseExited(MouseEvent event)
+			{
+			}
 		});
-		this.table.setDefaultRenderer(String.class, new AnimeListRenderer(centerRenderer));
+		this.table.setDefaultRenderer(AnimeInfo.class, new AnimeListRenderer(centerRenderer));
 		this.table.getTableHeader().setReorderingAllowed(false);
 		this.table.getTableHeader().setResizingAllowed(true);
 		this.table.setRowHeight(25);
@@ -115,8 +127,46 @@ public class SearchPanel extends JPanel
 		sorter.setSortKeys(sortKeys);
 		sorter.sort();
 		entry = new JTextField();
+		entry.addKeyListener(new KeyListener()
+		{
+			@Override
+			public void keyTyped(KeyEvent e)
+			{
+
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e)
+			{
+				if(e.getExtendedKeyCode() == KeyEvent.VK_ENTER)
+					try
+					{
+						search();
+					}
+					catch(ParserConfigurationException | SAXException | IOException e1)
+					{
+						e1.printStackTrace();
+					}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e)
+			{
+
+			}
+		});
+		entry.requestFocus();
 		JButton search = new JButton("Rechercher");
-		search.addActionListener(e -> search());
+		search.addActionListener(e -> {
+			try
+			{
+				search();
+			}
+			catch(ParserConfigurationException | SAXException | IOException e1)
+			{
+				e1.printStackTrace();
+			}
+		});
 		int line = 0;
 		GridBagConstraints gcb = new GridBagConstraints();
 		gcb.anchor = GridBagConstraints.PAGE_START;
@@ -139,10 +189,10 @@ public class SearchPanel extends JPanel
 	public void resizeColumnWidth(JTable table)
 	{
 		final TableColumnModel columnModel = table.getColumnModel();
-		for (int column = 0; column < table.getColumnCount(); column++)
+		for(int column = 0; column < table.getColumnCount(); column++)
 		{
 			int width = 50;
-			for (int row = 0; row < table.getRowCount(); row++)
+			for(int row = 0; row < table.getRowCount(); row++)
 			{
 				TableCellRenderer renderer = table.getCellRenderer(row, column);
 				Component comp = table.prepareRenderer(renderer, row, column);
@@ -152,13 +202,22 @@ public class SearchPanel extends JPanel
 		}
 	}
 
-	private int getAnimeID(String name)//TODO
+	private AnimeInfo getAnimeInfo(String name)
 	{
-		return 1;
+		for(int i = 0; i < model.getRowCount(); i++)
+		{
+			AnimeInfo anime = (AnimeInfo) model.getValueAt(i, 0);
+			if(anime.getTitle().equals(name))
+				return anime;
+		}
+		return null;
 	}
 
-	private void search()
+	private void search() throws ParserConfigurationException, SAXException, IOException
 	{
-		String name = entry.getText();
+		model.setRowCount(0);
+		for(AnimeInfo anime : parent.myal.search(entry.getText()))
+			model.addRow(new AnimeInfo[]{anime});
+		model.fireTableDataChanged();
 	}
 }

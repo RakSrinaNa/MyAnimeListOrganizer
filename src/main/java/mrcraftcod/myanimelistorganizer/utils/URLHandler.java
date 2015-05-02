@@ -15,7 +15,6 @@ import java.util.Map;
 
 public class URLHandler
 {
-	private static final int TIMEOUT = 30000;
 	public static final String USER_AGENT_KEY = "User-Agent";
 	public static final String USER_AGENT = "MyAnimeListOrganizer/" + Main.VERSION;
 	public static final String CHARSET_TYPE_KEY = "charset";
@@ -24,6 +23,7 @@ public class URLHandler
 	public static final String CONTENT_TYPE = "application/x-www-form-urlencoded";
 	public static final String LANGUAGE_TYPE_KEY = "Accept-Language";
 	public static final String LANGUAGE_TYPE = "fr-FR";
+	private static final int TIMEOUT = 30000;
 
 	public static String getAsString(URL url, Map<String, String> headers) throws UnirestException, URISyntaxException
 	{
@@ -35,11 +35,6 @@ public class URLHandler
 		GetRequest req = getRequest(url, headers, params);
 		HttpResponse<String> response = req.asString();
 		return response.getBody();
-	}
-
-	public static String[] getAsStringArray(URL url, Map<String, String> headers) throws UnirestException, URISyntaxException
-	{
-		return getAsString(url, headers).split("\n");
 	}
 
 	public static int getStatus(URL url, Map<String, String> headers) throws UnirestException, URISyntaxException
@@ -62,7 +57,6 @@ public class URLHandler
 		if(params != null)
 			for(String key : params.keySet())
 				uriBuilder.addParameter(key, params.get(key));
-		System.out.println(uriBuilder.build().toString());
 		return Unirest.get(uriBuilder.build().toString()).headers(headers).header(LANGUAGE_TYPE_KEY, LANGUAGE_TYPE).header(CONTENT_TYPE_KEY, CONTENT_TYPE).header(CHARSET_TYPE_KEY, CHARSET_TYPE).header(USER_AGENT_KEY, USER_AGENT);
 	}
 
@@ -75,7 +69,6 @@ public class URLHandler
 		if(params != null)
 			for(String key : params.keySet())
 				uriBuilder.addParameter(key, params.get(key));
-		System.out.println(uriBuilder.build().toString());
 		HttpRequestWithBody request = Unirest.post(uriBuilder.build().toString()).headers(headers).header(LANGUAGE_TYPE_KEY, LANGUAGE_TYPE).header(CONTENT_TYPE_KEY, CONTENT_TYPE).header(CHARSET_TYPE_KEY, CHARSET_TYPE).header(USER_AGENT_KEY, USER_AGENT);
 		return data == null ? request.field("", "") : request.field("data", data);
 	}
@@ -84,11 +77,6 @@ public class URLHandler
 	{
 		MultipartBody request = postRequest(url, headers, null, data);
 		return request.asString().getBody();
-	}
-
-	public static String postAsString(URL url, HashMap<String, String> headers) throws URISyntaxException, UnirestException
-	{
-		return postAsString(url, headers, null);
 	}
 
 	public static int postCode(URL url, HashMap<String, String> headers, String data) throws URISyntaxException, UnirestException

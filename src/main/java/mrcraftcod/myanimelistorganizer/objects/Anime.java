@@ -26,7 +26,30 @@ public class Anime implements Comparable
 	private int priority;
 
 	public Anime()
-	{}
+	{
+	}
+
+	public Anime(AnimeInfo anime, Status status)
+	{
+		this(anime.getID(), anime.getTitle(), 0, anime.getEpisodes(), status, anime.getStart(), anime.getEnd());
+	}
+
+	public Anime(int ID, String title, int type, int episodes, Status status, Date start, Date end)
+	{
+		setID(ID);
+		setTitle(title);
+		setType(type);
+		setEpisodes(episodes);
+		setSerieStatus(0);
+		setStart(start);
+		setEnd(end);
+		setWatched(0);
+		setStartWatching(null);
+		setEndWatching(null);
+		setScore(0);
+		setStatus(status);
+		setPriority(LOW);
+	}
 
 	public static Anime bindXML(Node node) throws ParseException
 	{
@@ -170,24 +193,9 @@ public class Anime implements Comparable
 	}
 
 	@Override
-	public String toString()
-	{
-		return getTitle();
-	}
-
-	@Override
 	public int hashCode()
 	{
 		return getTitle().hashCode();
-	}
-
-	@Override
-	public int compareTo(Object o)
-	{
-		if(!(o instanceof Anime))
-			return 1;
-		Anime anime = (Anime)o;
-		return this.getTitle().compareTo(anime.getTitle());
 	}
 
 	@Override
@@ -195,8 +203,23 @@ public class Anime implements Comparable
 	{
 		if(!(o instanceof Anime))
 			return false;
-		Anime anime = (Anime)o;
+		Anime anime = (Anime) o;
 		return this.getTitle().equals(anime.getTitle());
+	}
+
+	@Override
+	public String toString()
+	{
+		return getTitle();
+	}
+
+	@Override
+	public int compareTo(Object o)
+	{
+		if(!(o instanceof Anime))
+			return 1;
+		Anime anime = (Anime) o;
+		return this.getTitle().compareTo(anime.getTitle());
 	}
 
 	public void addWatched(int number)

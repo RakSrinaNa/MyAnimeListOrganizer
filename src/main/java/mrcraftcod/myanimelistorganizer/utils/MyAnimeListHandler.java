@@ -4,6 +4,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import mrcraftcod.myanimelistorganizer.enums.Status;
 import mrcraftcod.myanimelistorganizer.frames.ModifyAnimeDialogFrame;
 import mrcraftcod.myanimelistorganizer.objects.Anime;
+import mrcraftcod.myanimelistorganizer.objects.AnimeInfo;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.utils.URIBuilder;
 import org.w3c.dom.Document;
@@ -80,25 +81,11 @@ public class MyAnimeListHandler
 		return new URL(uriBuilder.toString());
 	}
 
-	public void reloadAnimes() throws URISyntaxException, ParserConfigurationException, UnirestException, SAXException, IOException, InterruptedException
+	private synchronized void getAnimes() throws IOException, URISyntaxException, ParserConfigurationException, SAXException
 	{
-		watchingAnime.clear();
-		completedAnime.clear();
-		onHoldAnime.clear();
-		droppedAnime.clear();
-		plannedAnime.clear();
-		getAnimes();
-	}
-
-	private synchronized void getAnimes() throws IOException, URISyntaxException, UnirestException, ParserConfigurationException, SAXException, InterruptedException
-	{
-		HttpURLConnection con = (HttpURLConnection)getAnimeXMLURL().openConnection();
-		con.setRequestProperty(URLHandler.USER_AGENT_KEY, URLHandler.USER_AGENT);
-		con.setRequestProperty(URLHandler.CHARSET_TYPE_KEY, URLHandler.CHARSET_TYPE);
-		con.setRequestProperty(URLHandler.CONTENT_TYPE_KEY, URLHandler.CONTENT_TYPE);
-		con.setRequestProperty(URLHandler.LANGUAGE_TYPE_KEY, URLHandler.LANGUAGE_TYPE);
+		HttpURLConnection con = getHttpConnexion(getAnimeXMLURL());
 		con.connect();
-		String xml = IOUtils.toString(con.getInputStream());
+		String xml = convertForJDOM(IOUtils.toString(con.getInputStream()));
 		con.disconnect();
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		dbFactory.setNamespaceAware(true);
@@ -137,8 +124,17 @@ public class MyAnimeListHandler
 			{
 				e.printStackTrace();
 			}
-
 		}
+	}
+
+	private HttpURLConnection getHttpConnexion(URL url) throws IOException
+	{
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setRequestProperty(URLHandler.USER_AGENT_KEY, URLHandler.USER_AGENT);
+		con.setRequestProperty(URLHandler.CHARSET_TYPE_KEY, URLHandler.CHARSET_TYPE);
+		con.setRequestProperty(URLHandler.CONTENT_TYPE_KEY, URLHandler.CONTENT_TYPE);
+		con.setRequestProperty(URLHandler.LANGUAGE_TYPE_KEY, URLHandler.LANGUAGE_TYPE);
+		return con;
 	}
 
 	private boolean connect() throws IOException, URISyntaxException, UnirestException
@@ -148,33 +144,59 @@ public class MyAnimeListHandler
 		return URLHandler.getStatus(new URL("http://myanimelist.net/api/account/verify_credentials.xml"), header) == 200;
 	}
 
-	public boolean addAnime(int ID) throws IOException, URISyntaxException, UnirestException
-	{
-		return addAnime(ID, Status.PLANNEDTOWATCH);
-	}
-
-	public synchronized boolean addAnime(int ID, Status status) throws IOException, URISyntaxException, UnirestException
+	public synchronized boolean addAnime(AnimeInfo anime, Status status) throws IOException, URISyntaxException, UnirestException
 	{
 		HashMap<String, String> header = new HashMap<>();
 		header.put("Authorization", "Basic " + auth);
-		if(URLHandler.postCode(new URL("http://myanimelist.net/api/animelist/add/" + ID + ".xml"), header, genXMLAnime(0, status.getID(), 0, null, null, 0)) == 201)
+		if(URLHandler.postCode(new URL("http://myanimelist.net/api/animelist/add/" + anime.getID() + ".xml"), header, genXMLAnime(0, status.getID(), 0, null, null, 0)) == 201)
 		{
-			addAnimeToSets(getAnimeInfos(ID));
+			addAnimeToSets(new Anime(anime, status));
 			return true;
 		}
 		return false;
 	}
 
-	public Anime getAnimeInfos(int ID) //TODO
+	public TreeSet<AnimeInfo> search(String name) throws IOException, ParserConfigurationException, SAXException
 	{
-		return new Anime();
+		TreeSet<AnimeInfo> result = new TreeSet<>();
+		HttpURLConnection con = getHttpConnexion(new URL("http://myanimelist.net/api/anime/search.xml?q=" + name.replaceAll(" ", "+")));
+		con.setRequestProperty("Authorization", "Basic " + auth);
+		con.connect();
+		String xml = convertForJDOM(IOUtils.toString(con.getInputStream()));
+		con.disconnect();
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		dbFactory.setNamespaceAware(true);
+		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		Document doc = dBuilder.parse(new ByteArrayInputStream(xml.getBytes()));
+		doc.getDocumentElement().normalize();
+		NodeList animeList = doc.getElementsByTagName("entry");
+		for(int i = 0; i < animeList.getLength(); i++)
+		{
+			Node animeNode = animeList.item(i);
+			if(animeNode.getNodeType() != Node.ELEMENT_NODE)
+				continue;
+			try
+			{
+				result.add(AnimeInfo.bindXML(animeNode));
+			}
+			catch(ParseException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return result;
 	}
 
 	public synchronized boolean deleteAnime(Anime anime) throws IOException, URISyntaxException, UnirestException
 	{
 		HashMap<String, String> header = new HashMap<>();
 		header.put("Authorization", "Basic " + auth);
-		return URLHandler.postCode(new URL("http://myanimelist.net/api/animelist/delete/" + anime.getID() + ".xml"), header) == 200;
+		if(URLHandler.postCode(new URL("http://myanimelist.net/api/animelist/delete/" + anime.getID() + ".xml"), header) == 200)
+		{
+			removeAnimeFromSets(anime);
+			return true;
+		}
+		return false;
 	}
 
 	private String genXMLAnime(int episode, int status, int score, Date start, Date end, int priority)
@@ -288,21 +310,51 @@ public class MyAnimeListHandler
 				break;
 			case COMPLETED:
 				completedAnime.add(anime);
-			break;
+				break;
 			case ONHOLD:
 				onHoldAnime.add(anime);
-			break;
+				break;
 			case DROPPED:
 				droppedAnime.add(anime);
-			break;
+				break;
 			case PLANNEDTOWATCH:
 				plannedAnime.add(anime);
-			break;
+				break;
 		}
 	}
 
 	public void updateAnime(Anime anime) throws URISyntaxException, UnirestException, MalformedURLException
 	{
 		updateAnime(anime.getID(), anime.getWatched(), anime.getStatus(), anime.getScore(), anime.getStartWatching(), anime.getEndWatching(), anime.getPriority());
+	}
+
+	private String convertForJDOM(String string)
+	{
+		return string.replaceAll("&mdash;", "-").replaceAll("&ocirc;", "o").replaceAll("&ucirc;", "u");
+	}
+
+	public Anime getAnimeByID(int ID)
+	{
+		for(Anime anime : watchingAnime)
+			if(anime.getID() == ID)
+				return anime;
+		for(Anime anime : completedAnime)
+			if(anime.getID() == ID)
+				return anime;
+		for(Anime anime : onHoldAnime)
+			if(anime.getID() == ID)
+				return anime;
+		for(Anime anime : droppedAnime)
+			if(anime.getID() == ID)
+				return anime;
+		for(Anime anime : plannedAnime)
+			if(anime.getID() == ID)
+				return anime;
+		return null;
+	}
+
+	public boolean containsID(int ID)
+	{
+		return getAnimeByID(ID) != null;
 	}
 }

@@ -1,0 +1,138 @@
+package mrcraftcod.myanimelistorganizer.frames;
+
+import mrcraftcod.myanimelistorganizer.objects.AnimeInfo;
+import javax.swing.*;
+import java.awt.*;
+import java.text.SimpleDateFormat;
+
+public class AnimeInfoDialog extends JDialog
+{
+	public AnimeInfoDialog(Window parent, AnimeInfo anime)
+	{
+		super(parent);
+		setTitle("Modification de l'anime : " + anime.getTitle());
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		setLayout(new GridBagLayout());
+		setResizable(false);
+		setModal(true);
+		SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		JLabel titleLabel = new JLabel("Titre: ");
+		titleLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel title = new JLabel(getWidthString(anime.getTitle()));
+		title.setHorizontalAlignment(SwingConstants.LEFT);
+		JLabel episodesLabel = new JLabel("Episodes: ");
+		episodesLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel episodes = new JLabel(getWidthString("" + anime.getEpisodes()));
+		episodes.setHorizontalAlignment(SwingConstants.LEFT);
+		JLabel typeLabel = new JLabel("Type: ");
+		typeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel type = new JLabel(getWidthString("" + anime.getType()));
+		type.setHorizontalAlignment(SwingConstants.LEFT);
+		JLabel startLabel = new JLabel("D\351but: ");
+		startLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel start = new JLabel(getWidthString("" + (anime.getStart().getTime() == 0 ? "" : df.format(anime.getStart()))));
+		start.setHorizontalAlignment(SwingConstants.LEFT);
+		JLabel endLabel = new JLabel("Fin: ");
+		endLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel end = new JLabel(getWidthString("" + (anime.getEnd().getTime() == 0 ? "" : df.format(anime.getEnd()))));
+		end.setHorizontalAlignment(SwingConstants.LEFT);
+		JLabel statusLabel = new JLabel("Status: ");
+		statusLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel status = new JLabel(getWidthString("" + anime.getStatus()));
+		status.setHorizontalAlignment(SwingConstants.LEFT);
+		JLabel synopsisLabel = new JLabel("Synopsis: ");
+		synopsisLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel synopsis = new JLabel(getWidthString("" + anime.getSynopsis()));
+		synopsis.setHorizontalAlignment(SwingConstants.LEFT);
+		int line = 0;
+		GridBagConstraints gcb = new GridBagConstraints();
+		getContentPane().setLayout(new GridBagLayout());
+		gcb.anchor = GridBagConstraints.PAGE_START;
+		gcb.fill = GridBagConstraints.BOTH;
+		gcb.insets = new Insets(3, 5, 3, 5);
+		gcb.weighty = 100;
+		gcb.weightx = 1;
+		gcb.gridheight = 1;
+		gcb.gridwidth = 1;
+		gcb.gridx = 0;
+		gcb.gridy = line++;
+		getContentPane().add(titleLabel, gcb);
+		gcb.gridx = 1;
+		gcb.weightx = 100;
+		getContentPane().add(title, gcb);
+		gcb.gridy = line++;
+		gcb.gridx = 0;
+		gcb.weightx = 1;
+		gcb.gridwidth = 2;
+		getContentPane().add(new JSeparator(JSeparator.HORIZONTAL), gcb);
+		gcb.gridy = line++;
+		gcb.gridwidth = 1;
+		getContentPane().add(episodesLabel, gcb);
+		gcb.gridx = 1;
+		gcb.weightx = 100;
+		getContentPane().add(episodes, gcb);
+		gcb.gridy = line++;
+		gcb.gridx = 0;
+		gcb.weightx = 1;
+		gcb.gridwidth = 2;
+		getContentPane().add(new JSeparator(JSeparator.HORIZONTAL), gcb);
+		gcb.gridy = line++;
+		gcb.gridwidth = 1;
+		getContentPane().add(typeLabel, gcb);
+		gcb.gridx = 1;
+		gcb.weightx = 100;
+		getContentPane().add(type, gcb);
+		gcb.gridy = line++;
+		gcb.gridx = 0;
+		gcb.weightx = 1;
+		gcb.gridwidth = 2;
+		getContentPane().add(new JSeparator(JSeparator.HORIZONTAL), gcb);
+		gcb.gridy = line++;
+		gcb.gridwidth = 1;
+		getContentPane().add(statusLabel, gcb);
+		gcb.gridx = 1;
+		gcb.weightx = 100;
+		getContentPane().add(status, gcb);
+		gcb.gridy = line++;
+		gcb.gridx = 0;
+		gcb.weightx = 1;
+		gcb.gridwidth = 2;
+		getContentPane().add(new JSeparator(JSeparator.HORIZONTAL), gcb);
+		gcb.gridy = line++;
+		gcb.gridwidth = 1;
+		getContentPane().add(startLabel, gcb);
+		gcb.gridx = 1;
+		gcb.weightx = 100;
+		getContentPane().add(start, gcb);
+		gcb.gridy = line++;
+		gcb.gridx = 0;
+		gcb.weightx = 1;
+		gcb.gridwidth = 2;
+		getContentPane().add(new JSeparator(JSeparator.HORIZONTAL), gcb);
+		gcb.gridy = line++;
+		gcb.gridwidth = 1;
+		getContentPane().add(endLabel, gcb);
+		gcb.gridx = 1;
+		gcb.weightx = 100;
+		getContentPane().add(end, gcb);
+		gcb.gridy = line++;
+		gcb.gridx = 0;
+		gcb.weightx = 1;
+		gcb.gridwidth = 2;
+		getContentPane().add(new JSeparator(JSeparator.HORIZONTAL), gcb);
+		gcb.gridy = line++;
+		gcb.gridwidth = 1;
+		getContentPane().add(synopsisLabel, gcb);
+		gcb.gridx = 1;
+		gcb.weightx = 100;
+		getContentPane().add(synopsis, gcb);
+		pack();
+		setLocationRelativeTo(parent);
+		setVisible(true);
+	}
+
+	private String getWidthString(String text)
+	{
+		return "<html><p width=\"" + 750 + "\">" + text + "</p></html>";
+	}
+}

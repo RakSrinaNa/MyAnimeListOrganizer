@@ -13,6 +13,14 @@ public enum Status
 		this.name = name;
 	}
 
+	public static Status getByID(int ID)
+	{
+		for(Status status : Status.values())
+			if(status.getID() == ID)
+				return status;
+		return PLANNEDTOWATCH;
+	}
+
 	public int getID()
 	{
 		return ID;
@@ -27,13 +35,5 @@ public enum Status
 	public String toString()
 	{
 		return getName();
-	}
-
-	public static Status getByID(int ID)
-	{
-		for(Status status : Status.values())
-			if(status.getID() == ID)
-				return status;
-		return PLANNEDTOWATCH;
 	}
 }

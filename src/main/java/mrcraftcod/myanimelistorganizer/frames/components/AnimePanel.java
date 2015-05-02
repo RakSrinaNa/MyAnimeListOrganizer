@@ -20,10 +20,10 @@ import java.util.TreeSet;
 
 public class AnimePanel extends JPanel
 {
+	public final JTableUneditableModel model;
 	private final JTable table;
 	private final MainFrame parent;
 	private final Status status;
-	public JTableUneditableModel model;
 
 	public AnimePanel(MainFrame parent, Status status)
 	{
@@ -86,16 +86,6 @@ public class AnimePanel extends JPanel
 			}
 
 			@Override
-			public void mouseEntered(MouseEvent event)
-			{
-			}
-
-			@Override
-			public void mouseExited(MouseEvent event)
-			{
-			}
-
-			@Override
 			public void mousePressed(MouseEvent event)
 			{
 			}
@@ -111,15 +101,13 @@ public class AnimePanel extends JPanel
 				int rowindex = AnimePanel.this.table.getSelectedRow();
 				if(event.isPopupTrigger() && event.getComponent() instanceof JTable)
 				{
-					final String name = AnimePanel.this.table.getValueAt(rowindex, 0).toString().trim();
-					final Anime anime = parent.myal.getAnimeByName(name);
+					final Anime anime = parent.myal.getAnimeByName(AnimePanel.this.table.getValueAt(rowindex, 0).toString().trim());
 					JPopupMenu popup = new JPopupMenu();
 					JMenuItem viewMoreAnime = new JMenuItem("+1 Episode vu");
 					viewMoreAnime.addActionListener(event1 -> {
 						try
 						{
 							anime.addWatched(1);
-							parent.myal.updateAnime(anime);
 							parent.updateAll();
 						}
 						catch(Exception exception)
@@ -130,7 +118,8 @@ public class AnimePanel extends JPanel
 					modifyAnime.addActionListener(event1 -> {
 						try
 						{
-							parent.modify(anime);
+							parent.myal.modify(parent, anime);
+							parent.updateAll();
 						}
 						catch(Exception exception)
 						{
@@ -141,18 +130,28 @@ public class AnimePanel extends JPanel
 						try
 						{
 							parent.myal.deleteAnime(anime);
+							parent.updateAll();
 						}
 						catch(Exception exception)
 						{
 						}
 					});
-					System.out.println(anime.getWatched() + "//" + anime.getEpisodes());
 					if(status == Status.WATCHING && anime.getWatched() < anime.getEpisodes())
 						popup.add(viewMoreAnime);
 					popup.add(modifyAnime);
 					popup.add(deleteAnime);
 					popup.show(event.getComponent(), event.getX(), event.getY());
 				}
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent event)
+			{
+			}
+
+			@Override
+			public void mouseExited(MouseEvent event)
+			{
 			}
 		});
 		this.table.setDefaultRenderer(String.class, new AnimeListRenderer(centerRenderer));
@@ -188,10 +187,10 @@ public class AnimePanel extends JPanel
 	public void resizeColumnWidth(JTable table)
 	{
 		final TableColumnModel columnModel = table.getColumnModel();
-		for (int column = 0; column < table.getColumnCount(); column++)
+		for(int column = 0; column < table.getColumnCount(); column++)
 		{
 			int width = 50;
-			for (int row = 0; row < table.getRowCount(); row++)
+			for(int row = 0; row < table.getRowCount(); row++)
 			{
 				TableCellRenderer renderer = table.getCellRenderer(row, column);
 				Component comp = table.prepareRenderer(renderer, row, column);
