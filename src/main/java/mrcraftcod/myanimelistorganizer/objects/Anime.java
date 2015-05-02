@@ -1,5 +1,6 @@
-package mrcraftcod.myanimelistorganizer.object;
+package mrcraftcod.myanimelistorganizer.objects;
 
+import mrcraftcod.myanimelistorganizer.enums.Status;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import java.text.DateFormat;
@@ -9,7 +10,7 @@ import java.util.Date;
 
 public class Anime implements Comparable
 {
-	public static final int WATCHING = 1, COMPLETED = 2, ONHOLD = 3, DROPPED = 4, PLANEDTOWATCH = 6, LOW = 0, MEDIUM = 1, HIGH = 2;
+	public static final int LOW = 0, MEDIUM = 1, HIGH = 2;
 	private int ID;
 	private String title;
 	private int type;
@@ -21,7 +22,8 @@ public class Anime implements Comparable
 	private Date startWatching;
 	private Date endWatching;
 	private int score;
-	private int status;
+	private Status status;
+	private int priority;
 
 	public Anime()
 	{}
@@ -42,7 +44,8 @@ public class Anime implements Comparable
 		anime.setStartWatching(df.parse(element.getElementsByTagName("my_start_date").item(0).getTextContent()));
 		anime.setEndWatching(df.parse(element.getElementsByTagName("my_finish_date").item(0).getTextContent()));
 		anime.setScore(Integer.parseInt(element.getElementsByTagName("my_score").item(0).getTextContent()));
-		anime.setStatus(Integer.parseInt(element.getElementsByTagName("my_status").item(0).getTextContent()));
+		anime.setStatus(Status.getByID(Integer.parseInt(element.getElementsByTagName("my_status").item(0).getTextContent())));
+		anime.setPriority(LOW);
 		return anime;
 	}
 
@@ -156,12 +159,12 @@ public class Anime implements Comparable
 		this.score = score;
 	}
 
-	public int getStatus()
+	public Status getStatus()
 	{
 		return status;
 	}
 
-	public void setStatus(int status)
+	public void setStatus(Status status)
 	{
 		this.status = status;
 	}
@@ -194,5 +197,20 @@ public class Anime implements Comparable
 			return false;
 		Anime anime = (Anime)o;
 		return this.getTitle().equals(anime.getTitle());
+	}
+
+	public void addWatched(int number)
+	{
+		setWatched(getWatched() + number);
+	}
+
+	public int getPriority()
+	{
+		return priority;
+	}
+
+	public void setPriority(int priority)
+	{
+		this.priority = priority;
 	}
 }

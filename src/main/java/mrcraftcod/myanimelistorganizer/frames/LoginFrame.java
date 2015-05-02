@@ -1,4 +1,4 @@
-package mrcraftcod.myanimelistorganizer.frame;
+package mrcraftcod.myanimelistorganizer.frames;
 
 import mrcraftcod.myanimelistorganizer.Main;
 import mrcraftcod.myanimelistorganizer.utils.MyAnimeListHandler;

@@ -1,11 +1,15 @@
-package mrcraftcod.myanimelistorganizer.frame;
+package mrcraftcod.myanimelistorganizer.frames;
 
+import com.mashape.unirest.http.exceptions.UnirestException;
 import mrcraftcod.myanimelistorganizer.Main;
-import mrcraftcod.myanimelistorganizer.frame.component.PanelAnime;
-import mrcraftcod.myanimelistorganizer.object.Anime;
+import mrcraftcod.myanimelistorganizer.enums.Status;
+import mrcraftcod.myanimelistorganizer.frames.components.PanelAnime;
+import mrcraftcod.myanimelistorganizer.objects.Anime;
 import mrcraftcod.myanimelistorganizer.utils.MyAnimeListHandler;
 import javax.swing.*;
 import java.awt.*;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 
 public class MainFrame extends JFrame
 {
@@ -25,17 +29,17 @@ public class MainFrame extends JFrame
 		this.setIconImages(Main.icons);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.getContentPane().setLayout(new GridBagLayout());
-		watching = new PanelAnime(this, Anime.WATCHING);
-		completed = new PanelAnime(this, Anime.COMPLETED);
-		onHold = new PanelAnime(this, Anime.ONHOLD);
-		dropped = new PanelAnime(this, Anime.DROPPED);
-		planned = new PanelAnime(this, Anime.PLANEDTOWATCH);
+		watching = new PanelAnime(this, Status.WATCHING);
+		completed = new PanelAnime(this, Status.COMPLETED);
+		onHold = new PanelAnime(this, Status.ONHOLD);
+		dropped = new PanelAnime(this, Status.DROPPED);
+		planned = new PanelAnime(this, Status.PLANNEDTOWATCH);
 		JTabbedPane tabbedPane = new JTabbedPane();
-		tabbedPane.addTab("Watching", null, watching);
-		tabbedPane.addTab("Completed", null, completed);
-		tabbedPane.addTab("On hold", null, onHold);
-		tabbedPane.addTab("Dropped", null, dropped);
-		tabbedPane.addTab("Plan to watch", null, planned);
+		tabbedPane.addTab(watching.getName(), null, watching);
+		tabbedPane.addTab(completed.getName(), null, completed);
+		tabbedPane.addTab(onHold.getName(), null, onHold);
+		tabbedPane.addTab(dropped.getName(), null, dropped);
+		tabbedPane.addTab(planned.getName(), null, planned);
 		int line = 0;
 		GridBagConstraints gcb = new GridBagConstraints();
 		getContentPane().setLayout(new GridBagLayout());
@@ -54,13 +58,13 @@ public class MainFrame extends JFrame
 		setVisible(true);
 	}
 
-	public void modify(Anime anime)
+	public void modify(Anime anime) throws URISyntaxException, UnirestException, MalformedURLException
 	{
 		myal.modify(this, anime);
 		updateAll();
 	}
 
-	private void updateAll()
+	public void updateAll()
 	{
 		watching.reload();
 		completed.reload();

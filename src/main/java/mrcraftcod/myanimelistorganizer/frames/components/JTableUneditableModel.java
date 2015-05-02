@@ -1,4 +1,4 @@
-package mrcraftcod.myanimelistorganizer.frame.component;
+package mrcraftcod.myanimelistorganizer.frames.components;
 
 import javax.swing.table.DefaultTableModel;
 
