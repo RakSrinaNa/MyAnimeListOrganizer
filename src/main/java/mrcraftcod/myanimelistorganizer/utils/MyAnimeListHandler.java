@@ -165,7 +165,7 @@ public class MyAnimeListHandler
 		return false;
 	}
 
-	private Anime getAnimeInfos(int ID) //TODO
+	public Anime getAnimeInfos(int ID) //TODO
 	{
 		return new Anime();
 	}

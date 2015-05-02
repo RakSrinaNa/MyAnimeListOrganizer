@@ -18,14 +18,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-public class PanelAnime extends JPanel
+public class AnimePanel extends JPanel
 {
 	private final JTable table;
 	private final MainFrame parent;
 	private final Status status;
 	public JTableUneditableModel model;
 
-	public PanelAnime(MainFrame parent, Status status)
+	public AnimePanel(MainFrame parent, Status status)
 	{
 		this.parent = parent;
 		this.status = status;
@@ -55,12 +55,12 @@ public class PanelAnime extends JPanel
 			@Override
 			public void keyPressed(KeyEvent e)
 			{
-				int rowindex = PanelAnime.this.table.getSelectedRow();
+				int rowindex = AnimePanel.this.table.getSelectedRow();
 				if(rowindex < 0)
 					return;
 				if(e.getExtendedKeyCode() != KeyEvent.VK_DELETE)
 					return;
-				String name = PanelAnime.this.table.getValueAt(rowindex, 0).toString().trim();
+				String name = AnimePanel.this.table.getValueAt(rowindex, 0).toString().trim();
 				Anime anime = parent.myal.getAnimeByName(name);
 				try
 				{
@@ -103,15 +103,15 @@ public class PanelAnime extends JPanel
 			@Override
 			public void mouseReleased(MouseEvent event)
 			{
-				int row = PanelAnime.this.table.rowAtPoint(event.getPoint());
-				if(row >= 0 && row < PanelAnime.this.table.getRowCount())
-					PanelAnime.this.table.setRowSelectionInterval(row, row);
+				int row = AnimePanel.this.table.rowAtPoint(event.getPoint());
+				if(row >= 0 && row < AnimePanel.this.table.getRowCount())
+					AnimePanel.this.table.setRowSelectionInterval(row, row);
 				else
-					PanelAnime.this.table.clearSelection();
-				int rowindex = PanelAnime.this.table.getSelectedRow();
+					AnimePanel.this.table.clearSelection();
+				int rowindex = AnimePanel.this.table.getSelectedRow();
 				if(event.isPopupTrigger() && event.getComponent() instanceof JTable)
 				{
-					final String name = PanelAnime.this.table.getValueAt(rowindex, 0).toString().trim();
+					final String name = AnimePanel.this.table.getValueAt(rowindex, 0).toString().trim();
 					final Anime anime = parent.myal.getAnimeByName(name);
 					JPopupMenu popup = new JPopupMenu();
 					JMenuItem viewMoreAnime = new JMenuItem("+1 Episode vu");

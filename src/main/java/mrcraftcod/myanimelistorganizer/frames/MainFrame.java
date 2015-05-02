@@ -3,7 +3,8 @@ package mrcraftcod.myanimelistorganizer.frames;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import mrcraftcod.myanimelistorganizer.Main;
 import mrcraftcod.myanimelistorganizer.enums.Status;
-import mrcraftcod.myanimelistorganizer.frames.components.PanelAnime;
+import mrcraftcod.myanimelistorganizer.frames.components.AnimePanel;
+import mrcraftcod.myanimelistorganizer.frames.components.SearchPanel;
 import mrcraftcod.myanimelistorganizer.objects.Anime;
 import mrcraftcod.myanimelistorganizer.utils.MyAnimeListHandler;
 import javax.swing.*;
@@ -14,11 +15,12 @@ import java.net.URISyntaxException;
 public class MainFrame extends JFrame
 {
 	public final MyAnimeListHandler myal;
-	private final PanelAnime watching;
-	private final PanelAnime completed;
-	private final PanelAnime onHold;
-	private final PanelAnime dropped;
-	private final PanelAnime planned;
+	private final AnimePanel watching;
+	private final AnimePanel completed;
+	private final AnimePanel onHold;
+	private final AnimePanel dropped;
+	private final AnimePanel planned;
+	private final SearchPanel search;
 
 	public MainFrame(MyAnimeListHandler myAnimeListHandler)
 	{
@@ -29,12 +31,14 @@ public class MainFrame extends JFrame
 		this.setIconImages(Main.icons);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.getContentPane().setLayout(new GridBagLayout());
-		watching = new PanelAnime(this, Status.WATCHING);
-		completed = new PanelAnime(this, Status.COMPLETED);
-		onHold = new PanelAnime(this, Status.ONHOLD);
-		dropped = new PanelAnime(this, Status.DROPPED);
-		planned = new PanelAnime(this, Status.PLANNEDTOWATCH);
+		search = new SearchPanel(this);
+		watching = new AnimePanel(this, Status.WATCHING);
+		completed = new AnimePanel(this, Status.COMPLETED);
+		onHold = new AnimePanel(this, Status.ONHOLD);
+		dropped = new AnimePanel(this, Status.DROPPED);
+		planned = new AnimePanel(this, Status.PLANNEDTOWATCH);
 		JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane.addTab(search.getName(), null, search);
 		tabbedPane.addTab(watching.getName(), null, watching);
 		tabbedPane.addTab(completed.getName(), null, completed);
 		tabbedPane.addTab(onHold.getName(), null, onHold);
