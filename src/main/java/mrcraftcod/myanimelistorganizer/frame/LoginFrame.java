@@ -1,23 +1,27 @@
-package mrcraftcod.myanimelistorganizer;
+package mrcraftcod.myanimelistorganizer.frame;
 
+import mrcraftcod.myanimelistorganizer.Main;
+import mrcraftcod.myanimelistorganizer.utils.MyAnimeListHandler;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class LoginFrame extends JFrame
+public class LoginFrame extends JDialog
 {
-	private MyAnimeListHandler result = null;
 	private final JTextField user;
 	private final JPasswordField password;
+	private MyAnimeListHandler result = null;
 
 	public LoginFrame()
 	{
-		super("Authentification");
-		//this.setIconImages(Utils.icons);
+		super((JFrame) null);
+		setTitle("Authentification");
+		this.setModal(true);
+		this.setIconImages(Main.icons);
 		this.setResizable(false);
 		this.setPreferredSize(new Dimension(500, 120));
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.getContentPane().setLayout(new GridBagLayout());
 		JLabel userLabel = new JLabel("Nom d'utilisateur:");
 		JLabel passwordLabel = new JLabel("Mot de passe:");
@@ -96,7 +100,7 @@ public class LoginFrame extends JFrame
 		gcb.gridy = line++;
 		getContentPane().add(login, gcb);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation(dim.width/2-this.getPreferredSize().width/2, dim.height/2-this.getPreferredSize().height/2);
+		this.setLocation(dim.width / 2 - this.getPreferredSize().width / 2, dim.height / 2 - this.getPreferredSize().height / 2);
 		pack();
 	}
 

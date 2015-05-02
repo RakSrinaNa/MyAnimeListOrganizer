@@ -1,4 +1,4 @@
-package mrcraftcod.myanimelistorganizer;
+package mrcraftcod.myanimelistorganizer.utils;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
@@ -6,6 +6,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.GetRequest;
 import com.mashape.unirest.request.HttpRequestWithBody;
 import com.mashape.unirest.request.body.MultipartBody;
+import mrcraftcod.myanimelistorganizer.Main;
 import org.apache.http.client.utils.URIBuilder;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -15,15 +16,14 @@ import java.util.Map;
 public class URLHandler
 {
 	private static final int TIMEOUT = 30000;
-	private static final String USER_AGENT_KEY = "User-Agent";
-	private static final String USER_AGENT = "MyAnimeListOrganizer/" + Main.VERSION;
-	private static final String CHARSET_TYPE_KEY = "charset";
-	private static final String CHARSET_TYPE = "utf-8";
-	private static final String CONTENT_TYPE_KEY = "Content-Type";
-	private static final String CONTENT_TYPE = "application/x-www-form-urlencoded";
-	private static final String LANGUAGE_TYPE_KEY = "Accept-Language";
-	private static final String LANGUAGE_TYPE = "fr-FR";
-
+	public static final String USER_AGENT_KEY = "User-Agent";
+	public static final String USER_AGENT = "MyAnimeListOrganizer/" + Main.VERSION;
+	public static final String CHARSET_TYPE_KEY = "charset";
+	public static final String CHARSET_TYPE = "utf-8";
+	public static final String CONTENT_TYPE_KEY = "Content-Type";
+	public static final String CONTENT_TYPE = "application/x-www-form-urlencoded";
+	public static final String LANGUAGE_TYPE_KEY = "Accept-Language";
+	public static final String LANGUAGE_TYPE = "fr-FR";
 
 	public static String getAsString(URL url, Map<String, String> headers) throws UnirestException, URISyntaxException
 	{
@@ -77,7 +77,7 @@ public class URLHandler
 				uriBuilder.addParameter(key, params.get(key));
 		System.out.println(uriBuilder.build().toString());
 		HttpRequestWithBody request = Unirest.post(uriBuilder.build().toString()).headers(headers).header(LANGUAGE_TYPE_KEY, LANGUAGE_TYPE).header(CONTENT_TYPE_KEY, CONTENT_TYPE).header(CHARSET_TYPE_KEY, CHARSET_TYPE).header(USER_AGENT_KEY, USER_AGENT);
-		return  data == null ? request.field("", "") : request.field("data", data);
+		return data == null ? request.field("", "") : request.field("data", data);
 	}
 
 	public static String postAsString(URL url, HashMap<String, String> headers, String data) throws URISyntaxException, UnirestException
