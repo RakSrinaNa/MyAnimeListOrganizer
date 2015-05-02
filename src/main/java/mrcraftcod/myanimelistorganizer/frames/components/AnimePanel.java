@@ -147,7 +147,7 @@ public class AnimePanel extends JPanel
 						}
 					});
 					System.out.println(anime.getWatched() + "//" + anime.getEpisodes());
-					if(anime.getWatched() < anime.getEpisodes())
+					if(status == Status.WATCHING && anime.getWatched() < anime.getEpisodes())
 						popup.add(viewMoreAnime);
 					popup.add(modifyAnime);
 					popup.add(deleteAnime);
