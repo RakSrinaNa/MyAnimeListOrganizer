@@ -1,9 +1,11 @@
 package mrcraftcod.myanimelistorganizer.frames.components;
 
+import com.mashape.unirest.http.exceptions.UnirestException;
 import mrcraftcod.myanimelistorganizer.enums.Status;
 import mrcraftcod.myanimelistorganizer.frames.AnimeInfoDialog;
 import mrcraftcod.myanimelistorganizer.frames.MainFrame;
 import mrcraftcod.myanimelistorganizer.objects.AnimeInfo;
+import mrcraftcod.myanimelistorganizer.utils.URLHandler;
 import org.xml.sax.SAXException;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -15,6 +17,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class SearchPanel extends JPanel
@@ -93,9 +97,26 @@ public class SearchPanel extends JPanel
 							exception.printStackTrace();
 						}
 					});
+					JMenuItem nekochan = new JMenuItem("Tenter d'ouvrir sur nekochan");
+					nekochan.addActionListener(e ->{
+						try
+						{
+							URL url = new URL("http://www.neko-san.fr/anime/" + anime.getTitle().replaceAll(" ", "-"));
+							if(URLHandler.getAsString(url).contains("http://img.neko-san.fr/img/404.png"))
+								JOptionPane.showMessageDialog(parent, "Anime non trouv\351", "Erreur", JOptionPane.ERROR_MESSAGE);
+							else
+								Desktop.getDesktop().browse(url.toURI());
+						}
+						catch(IOException | URISyntaxException | UnirestException e1)
+						{
+							e1.printStackTrace();
+						}
+					});
 					popup.add(viewMoreInfo);
 					if(!parent.myal.containsID(anime.getID()))
 						popup.add(addAnime);
+					popup.addSeparator();
+					popup.add(nekochan);
 					popup.show(event.getComponent(), event.getX(), event.getY());
 				}
 			}

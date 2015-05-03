@@ -89,4 +89,9 @@ public class URLHandler
 	{
 		return postCode(url, headers, null);
 	}
+
+	public static String getAsString(URL url) throws URISyntaxException, UnirestException
+	{
+		return getAsString(url, null);
+	}
 }
