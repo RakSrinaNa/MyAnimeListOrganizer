@@ -97,26 +97,10 @@ public class SearchPanel extends JPanel
 							exception.printStackTrace();
 						}
 					});
-					JMenuItem nekochan = new JMenuItem("Tenter d'ouvrir sur nekochan");
-					nekochan.addActionListener(e ->{
-						try
-						{
-							URL url = new URL("http://www.neko-san.fr/anime/" + anime.getTitle().replaceAll(" ", "-"));
-							if(URLHandler.getAsString(url).contains("http://img.neko-san.fr/img/404.png"))
-								JOptionPane.showMessageDialog(parent, "Anime non trouv\351", "Erreur", JOptionPane.ERROR_MESSAGE);
-							else
-								Desktop.getDesktop().browse(url.toURI());
-						}
-						catch(IOException | URISyntaxException | UnirestException e1)
-						{
-							e1.printStackTrace();
-						}
-					});
 					popup.add(viewMoreInfo);
 					if(!parent.myal.containsID(anime.getID()))
 						popup.add(addAnime);
 					popup.addSeparator();
-					popup.add(nekochan);
 					popup.show(event.getComponent(), event.getX(), event.getY());
 				}
 			}

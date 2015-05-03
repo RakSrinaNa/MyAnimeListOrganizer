@@ -4,6 +4,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import mrcraftcod.myanimelistorganizer.enums.Status;
 import mrcraftcod.myanimelistorganizer.frames.MainFrame;
 import mrcraftcod.myanimelistorganizer.objects.Anime;
+import mrcraftcod.myanimelistorganizer.utils.URLHandler;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.*;
@@ -14,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeSet;
@@ -136,8 +138,27 @@ public class AnimePanel extends JPanel
 						{
 						}
 					});
+					JMenuItem nekochan = new JMenuItem("Tenter d'ouvrir sur nekochan");
+					nekochan.addActionListener(e ->{
+						try
+						{
+							URL url = new URL("http://www.neko-san.fr/anime/" + anime.getTitle().replaceAll(" ", "-"));
+							if(URLHandler.getAsString(url).contains("http://img.neko-san.fr/img/404.png"))
+								JOptionPane.showMessageDialog(parent, "Anime non trouv\351", "Erreur", JOptionPane.ERROR_MESSAGE);
+							else
+								Desktop.getDesktop().browse(url.toURI());
+						}
+						catch(IOException | URISyntaxException | UnirestException e1)
+						{
+							e1.printStackTrace();
+						}
+					});
 					if(status == Status.WATCHING && anime.getWatched() < anime.getEpisodes())
+					{
 						popup.add(viewMoreAnime);
+						popup.add(nekochan);
+						popup.addSeparator();
+					}
 					popup.add(modifyAnime);
 					popup.add(deleteAnime);
 					popup.show(event.getComponent(), event.getX(), event.getY());
