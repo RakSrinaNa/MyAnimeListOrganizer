@@ -222,9 +222,10 @@ public class Anime implements Comparable
 		return this.getTitle().compareTo(anime.getTitle());
 	}
 
-	public void addWatched(int number)
+	public boolean addWatched(int number)
 	{
 		setWatched(getWatched() + number);
+		return getWatched() == getEpisodes();
 	}
 
 	public int getPriority()

@@ -109,7 +109,9 @@ public class AnimePanel extends JPanel
 					viewMoreAnime.addActionListener(event1 -> {
 						try
 						{
-							anime.addWatched(1);
+							if(anime.addWatched(1))
+								if(JOptionPane.showConfirmDialog(parent, "Tout les \351pisodes ont \351t\351 vus.\n\nPasser l'anime en " + Status.COMPLETED.getName().toLowerCase() + "?", "Anime termin\351", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+									anime.setStatus(Status.COMPLETED);
 							parent.updateAll();
 						}
 						catch(Exception exception)
@@ -153,9 +155,10 @@ public class AnimePanel extends JPanel
 							e1.printStackTrace();
 						}
 					});
-					if(status == Status.WATCHING && anime.getWatched() < anime.getEpisodes())
+					if(status == Status.WATCHING)
 					{
-						popup.add(viewMoreAnime);
+						if(anime.getWatched() < anime.getEpisodes())
+							popup.add(viewMoreAnime);
 						popup.add(nekochan);
 						popup.addSeparator();
 					}
