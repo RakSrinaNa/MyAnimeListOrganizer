@@ -8,6 +8,7 @@ import com.mashape.unirest.request.HttpRequestWithBody;
 import com.mashape.unirest.request.body.MultipartBody;
 import mrcraftcod.myanimelistorganizer.Main;
 import org.apache.http.client.utils.URIBuilder;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
@@ -53,11 +54,16 @@ public class URLHandler
 		Unirest.clearDefaultHeaders();
 		Unirest.setTimeouts(TIMEOUT, TIMEOUT);
 		Unirest.setDefaultHeader(USER_AGENT_KEY, USER_AGENT);
+		return Unirest.get(getBuiltURI(url, params).toString()).headers(headers).header(LANGUAGE_TYPE_KEY, LANGUAGE_TYPE).header(CONTENT_TYPE_KEY, CONTENT_TYPE).header(CHARSET_TYPE_KEY, CHARSET_TYPE).header(USER_AGENT_KEY, USER_AGENT);
+	}
+
+	public static URI getBuiltURI(URL url, Map<String, String> params) throws URISyntaxException
+	{
 		URIBuilder uriBuilder = new URIBuilder(url.toURI());
 		if(params != null)
 			for(String key : params.keySet())
 				uriBuilder.addParameter(key, params.get(key));
-		return Unirest.get(uriBuilder.build().toString()).headers(headers).header(LANGUAGE_TYPE_KEY, LANGUAGE_TYPE).header(CONTENT_TYPE_KEY, CONTENT_TYPE).header(CHARSET_TYPE_KEY, CHARSET_TYPE).header(USER_AGENT_KEY, USER_AGENT);
+		return uriBuilder.build();
 	}
 
 	private static MultipartBody postRequest(URL url, Map<String, String> headers, Map<String, String> params, String data) throws URISyntaxException
@@ -65,11 +71,7 @@ public class URLHandler
 		Unirest.clearDefaultHeaders();
 		Unirest.setTimeouts(TIMEOUT, TIMEOUT);
 		Unirest.setDefaultHeader(USER_AGENT_KEY, USER_AGENT);
-		URIBuilder uriBuilder = new URIBuilder(url.toURI());
-		if(params != null)
-			for(String key : params.keySet())
-				uriBuilder.addParameter(key, params.get(key));
-		HttpRequestWithBody request = Unirest.post(uriBuilder.build().toString()).headers(headers).header(LANGUAGE_TYPE_KEY, LANGUAGE_TYPE).header(CONTENT_TYPE_KEY, CONTENT_TYPE).header(CHARSET_TYPE_KEY, CHARSET_TYPE).header(USER_AGENT_KEY, USER_AGENT);
+		HttpRequestWithBody request = Unirest.post(getBuiltURI(url, params).toString()).headers(headers).header(LANGUAGE_TYPE_KEY, LANGUAGE_TYPE).header(CONTENT_TYPE_KEY, CONTENT_TYPE).header(CHARSET_TYPE_KEY, CHARSET_TYPE).header(USER_AGENT_KEY, USER_AGENT);
 		return data == null ? request.field("", "") : request.field("data", data);
 	}
 

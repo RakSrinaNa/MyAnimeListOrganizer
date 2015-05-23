@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeSet;
 
@@ -111,7 +112,16 @@ public class AnimePanel extends JPanel
 						{
 							if(anime.addWatched(1))
 								if(JOptionPane.showConfirmDialog(parent, "Tout les \351pisodes ont \351t\351 vus.\n\nPasser l'anime en " + Status.COMPLETED.getName().toLowerCase() + "?", "Anime termin\351", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+								{
+									int score = 0;
+									try
+									{
+										Integer.valueOf(JOptionPane.showInputDialog(parent, "Entrez la note \340 attribuer (0 si pas de note):", "Note", JOptionPane.QUESTION_MESSAGE));
+									}
+									catch(Exception e1){}
+									anime.setScore(score);
 									anime.setStatus(Status.COMPLETED);
+								}
 							parent.updateAll();
 						}
 						catch(Exception exception)
@@ -155,10 +165,26 @@ public class AnimePanel extends JPanel
 							e1.printStackTrace();
 						}
 					});
+					JMenuItem google = new JMenuItem("Rechercher sur google");
+					google.addActionListener(e ->{
+						try
+						{
+							HashMap<String, String> params = new HashMap<>();
+							params.put("hl", "fr");
+							params.put("num", "20");
+							params.put("q", anime.getTitle());
+							Desktop.getDesktop().browse(URLHandler.getBuiltURI(new URL("http://www.google.fr/search"), params));
+						}
+						catch(Exception e1)
+						{
+							e1.printStackTrace();
+						}
+					});
 					if(status == Status.WATCHING)
 					{
 						if(anime.getWatched() < anime.getEpisodes())
 							popup.add(viewMoreAnime);
+						popup.add(google);
 						popup.add(nekochan);
 						popup.addSeparator();
 					}
