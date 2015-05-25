@@ -116,12 +116,13 @@ public class AnimePanel extends JPanel
 									int score = 0;
 									try
 									{
-										Integer.valueOf(JOptionPane.showInputDialog(parent, "Entrez la note \340 attribuer (0 si pas de note):", "Note", JOptionPane.QUESTION_MESSAGE));
+										score = Integer.valueOf(JOptionPane.showInputDialog(parent, "Entrez la note \340 attribuer (0 si pas de note):", "Note", JOptionPane.QUESTION_MESSAGE));
 									}
 									catch(Exception e1){}
 									anime.setScore(score);
 									anime.setStatus(Status.COMPLETED);
 								}
+							parent.myal.updateAnime(anime);
 							parent.updateAll();
 						}
 						catch(Exception exception)
