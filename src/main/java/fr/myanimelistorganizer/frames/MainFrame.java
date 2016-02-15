@@ -1,10 +1,10 @@
-package mrcraftcod.myanimelistorganizer.frames;
+package fr.myanimelistorganizer.frames;
 
-import mrcraftcod.myanimelistorganizer.Main;
-import mrcraftcod.myanimelistorganizer.enums.Status;
-import mrcraftcod.myanimelistorganizer.frames.components.AnimePanel;
-import mrcraftcod.myanimelistorganizer.frames.components.SearchPanel;
-import mrcraftcod.myanimelistorganizer.utils.MyAnimeListHandler;
+import fr.myanimelistorganizer.Main;
+import fr.myanimelistorganizer.enums.Status;
+import fr.myanimelistorganizer.frames.components.AnimePanel;
+import fr.myanimelistorganizer.frames.components.SearchPanel;
+import fr.myanimelistorganizer.utils.MyAnimeListHandler;
 import javax.swing.*;
 import java.awt.*;
 

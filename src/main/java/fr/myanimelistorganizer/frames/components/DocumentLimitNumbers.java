@@ -1,4 +1,4 @@
-package mrcraftcod.myanimelistorganizer.frames.components;
+package fr.myanimelistorganizer.frames.components;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;

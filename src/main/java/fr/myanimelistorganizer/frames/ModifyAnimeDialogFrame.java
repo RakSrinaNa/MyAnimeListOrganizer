@@ -1,8 +1,8 @@
-package mrcraftcod.myanimelistorganizer.frames;
+package fr.myanimelistorganizer.frames;
 
-import mrcraftcod.myanimelistorganizer.enums.Status;
-import mrcraftcod.myanimelistorganizer.frames.components.DocumentLimitNumbers;
-import mrcraftcod.myanimelistorganizer.objects.Anime;
+import fr.myanimelistorganizer.enums.Status;
+import fr.myanimelistorganizer.frames.components.DocumentLimitNumbers;
+import fr.myanimelistorganizer.objects.Anime;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;

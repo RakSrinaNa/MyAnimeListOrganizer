@@ -1,4 +1,4 @@
-package mrcraftcod.myanimelistorganizer.enums;
+package fr.myanimelistorganizer.enums;
 
 public enum Status
 {

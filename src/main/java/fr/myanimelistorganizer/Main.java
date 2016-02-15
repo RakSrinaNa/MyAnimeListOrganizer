@@ -1,7 +1,7 @@
-package mrcraftcod.myanimelistorganizer;
+package fr.myanimelistorganizer;
 
-import mrcraftcod.myanimelistorganizer.frames.LoginFrame;
-import mrcraftcod.myanimelistorganizer.frames.MainFrame;
+import fr.myanimelistorganizer.frames.LoginFrame;
+import fr.myanimelistorganizer.frames.MainFrame;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.net.URL;

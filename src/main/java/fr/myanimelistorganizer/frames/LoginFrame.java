@@ -1,7 +1,7 @@
-package mrcraftcod.myanimelistorganizer.frames;
+package fr.myanimelistorganizer.frames;
 
-import mrcraftcod.myanimelistorganizer.Main;
-import mrcraftcod.myanimelistorganizer.utils.MyAnimeListHandler;
+import fr.myanimelistorganizer.Main;
+import fr.myanimelistorganizer.utils.MyAnimeListHandler;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;

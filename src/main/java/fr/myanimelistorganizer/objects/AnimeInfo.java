@@ -1,4 +1,4 @@
-package mrcraftcod.myanimelistorganizer.objects;
+package fr.myanimelistorganizer.objects;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

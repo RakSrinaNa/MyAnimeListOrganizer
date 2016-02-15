@@ -1,4 +1,4 @@
-package mrcraftcod.myanimelistorganizer.utils;
+package fr.myanimelistorganizer.utils;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
@@ -6,7 +6,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.GetRequest;
 import com.mashape.unirest.request.HttpRequestWithBody;
 import com.mashape.unirest.request.body.MultipartBody;
-import mrcraftcod.myanimelistorganizer.Main;
+import fr.myanimelistorganizer.Main;
 import org.apache.http.client.utils.URIBuilder;
 import java.net.URI;
 import java.net.URISyntaxException;

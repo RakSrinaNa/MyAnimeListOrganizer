@@ -1,11 +1,9 @@
-package mrcraftcod.myanimelistorganizer.frames.components;
+package fr.myanimelistorganizer.frames.components;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
-import mrcraftcod.myanimelistorganizer.enums.Status;
-import mrcraftcod.myanimelistorganizer.frames.AnimeInfoDialog;
-import mrcraftcod.myanimelistorganizer.frames.MainFrame;
-import mrcraftcod.myanimelistorganizer.objects.AnimeInfo;
-import mrcraftcod.myanimelistorganizer.utils.URLHandler;
+import fr.myanimelistorganizer.enums.Status;
+import fr.myanimelistorganizer.frames.AnimeInfoDialog;
+import fr.myanimelistorganizer.frames.MainFrame;
+import fr.myanimelistorganizer.objects.AnimeInfo;
 import org.xml.sax.SAXException;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -17,8 +15,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class SearchPanel extends JPanel

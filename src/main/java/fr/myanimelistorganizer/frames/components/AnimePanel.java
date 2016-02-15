@@ -1,10 +1,10 @@
-package mrcraftcod.myanimelistorganizer.frames.components;
+package fr.myanimelistorganizer.frames.components;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
-import mrcraftcod.myanimelistorganizer.enums.Status;
-import mrcraftcod.myanimelistorganizer.frames.MainFrame;
-import mrcraftcod.myanimelistorganizer.objects.Anime;
-import mrcraftcod.myanimelistorganizer.utils.URLHandler;
+import fr.myanimelistorganizer.enums.Status;
+import fr.myanimelistorganizer.frames.MainFrame;
+import fr.myanimelistorganizer.objects.Anime;
+import fr.myanimelistorganizer.utils.URLHandler;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.*;

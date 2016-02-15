@@ -1,6 +1,6 @@
-package mrcraftcod.myanimelistorganizer.objects;
+package fr.myanimelistorganizer.objects;
 
-import mrcraftcod.myanimelistorganizer.enums.Status;
+import fr.myanimelistorganizer.enums.Status;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import java.text.DateFormat;

@@ -1,10 +1,10 @@
-package mrcraftcod.myanimelistorganizer.utils;
+package fr.myanimelistorganizer.utils;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
-import mrcraftcod.myanimelistorganizer.enums.Status;
-import mrcraftcod.myanimelistorganizer.frames.ModifyAnimeDialogFrame;
-import mrcraftcod.myanimelistorganizer.objects.Anime;
-import mrcraftcod.myanimelistorganizer.objects.AnimeInfo;
+import fr.myanimelistorganizer.enums.Status;
+import fr.myanimelistorganizer.frames.ModifyAnimeDialogFrame;
+import fr.myanimelistorganizer.objects.Anime;
+import fr.myanimelistorganizer.objects.AnimeInfo;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.utils.URIBuilder;
 import org.w3c.dom.Document;
@@ -103,19 +103,19 @@ public class MyAnimeListHandler
 				Anime anime = Anime.bindXML(animeNode);
 				switch(anime.getStatus())
 				{
-					case WATCHING:
+					case Status.WATCHING:
 						watchingAnime.add(anime);
 						break;
-					case COMPLETED:
+					case Status.COMPLETED:
 						completedAnime.add(anime);
 						break;
-					case ONHOLD:
+					case Status.ONHOLD:
 						onHoldAnime.add(anime);
 						break;
-					case DROPPED:
+					case Status.DROPPED:
 						droppedAnime.add(anime);
 						break;
-					case PLANNEDTOWATCH:
+					case Status.PLANNEDTOWATCH:
 						plannedAnime.add(anime);
 						break;
 				}
@@ -305,19 +305,19 @@ public class MyAnimeListHandler
 	{
 		switch(anime.getStatus())
 		{
-			case WATCHING:
+			case Status.WATCHING:
 				watchingAnime.add(anime);
 				break;
-			case COMPLETED:
+			case Status.COMPLETED:
 				completedAnime.add(anime);
 				break;
-			case ONHOLD:
+			case Status.ONHOLD:
 				onHoldAnime.add(anime);
 				break;
-			case DROPPED:
+			case Status.DROPPED:
 				droppedAnime.add(anime);
 				break;
-			case PLANNEDTOWATCH:
+			case Status.PLANNEDTOWATCH:
 				plannedAnime.add(anime);
 				break;
 		}

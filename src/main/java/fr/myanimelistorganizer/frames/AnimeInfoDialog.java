@@ -1,6 +1,6 @@
-package mrcraftcod.myanimelistorganizer.frames;
+package fr.myanimelistorganizer.frames;
 
-import mrcraftcod.myanimelistorganizer.objects.AnimeInfo;
+import fr.myanimelistorganizer.objects.AnimeInfo;
 import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
