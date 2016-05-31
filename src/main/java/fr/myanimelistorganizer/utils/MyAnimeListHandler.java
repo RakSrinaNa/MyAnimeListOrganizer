@@ -103,19 +103,19 @@ public class MyAnimeListHandler
 				Anime anime = Anime.bindXML(animeNode);
 				switch(anime.getStatus())
 				{
-					case Status.WATCHING:
+					case WATCHING:
 						watchingAnime.add(anime);
 						break;
-					case Status.COMPLETED:
+					case COMPLETED:
 						completedAnime.add(anime);
 						break;
-					case Status.ONHOLD:
+					case ONHOLD:
 						onHoldAnime.add(anime);
 						break;
-					case Status.DROPPED:
+					case DROPPED:
 						droppedAnime.add(anime);
 						break;
-					case Status.PLANNEDTOWATCH:
+					case PLANNEDTOWATCH:
 						plannedAnime.add(anime);
 						break;
 				}
@@ -305,19 +305,19 @@ public class MyAnimeListHandler
 	{
 		switch(anime.getStatus())
 		{
-			case Status.WATCHING:
+			case WATCHING:
 				watchingAnime.add(anime);
 				break;
-			case Status.COMPLETED:
+			case COMPLETED:
 				completedAnime.add(anime);
 				break;
-			case Status.ONHOLD:
+			case ONHOLD:
 				onHoldAnime.add(anime);
 				break;
-			case Status.DROPPED:
+			case DROPPED:
 				droppedAnime.add(anime);
 				break;
-			case Status.PLANNEDTOWATCH:
+			case PLANNEDTOWATCH:
 				plannedAnime.add(anime);
 				break;
 		}
